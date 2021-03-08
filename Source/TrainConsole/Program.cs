@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using TrainEngine;
 
 namespace TrainConsole
 {
@@ -6,14 +8,17 @@ namespace TrainConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Train track!");
-            // Step 1:
-            // Parse the traintrack (Data/traintrack.txt) using ORM (see suggested code)
-            // Parse the trains (Data/trains.txt)
+            TrainSchedule schedule = new TrainSchedule("Göteborg", "Stockholm", 
+                new DateTime(2021, 03, 08, 15, 30, 00), new DateTime(2021, 03, 08, 18, 30, 00), new List<Destination>()
+                {
+                    new Destination(new DateTime(2021, 03, 08, 15, 31, 00), new DateTime(2021, 03, 08, 15, 32, 00), "Alingsås"),
+                    new Destination(new DateTime(2021, 03, 08, 15, 33, 00), new DateTime(2021, 03, 08, 15, 34, 00), "Vårgårda"),
+                    new Destination(new DateTime(2021, 03, 08, 15, 35, 00), new DateTime(2021, 03, 08, 15, 36, 00), "Herrljunga"),
+                    new Destination(new DateTime(2021, 03, 08, 15, 37, 00), new DateTime(2021, 03, 08, 15, 38, 00), "Falköping"),
+                });;
 
-            // Step 2:
-            // Make the trains run in treads
-
+            TrainPlanner planner = new TrainPlanner();
+            planner.FollowSchedule(schedule);
         }
     }
 }
