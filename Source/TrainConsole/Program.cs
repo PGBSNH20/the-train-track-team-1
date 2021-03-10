@@ -19,8 +19,7 @@ namespace TrainConsole
 
             Train train = new Train(0, "X-2000", 250, true);
 
-            TrainSimulation simulation = new TrainSimulation(100);
-            simulation.StartSimulation(schedule, train);
+            TrainSimulation simulation = new TrainSimulation(100).AddSchedule(schedule).AddTrain(train).StartSimulation();
         }
     }
 }
