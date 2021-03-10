@@ -24,28 +24,9 @@ namespace TrainEngine
         public readonly List<Location> destinations;
 
         public TrainSchedule(Location startLocation, Location endLocation, List<Location> destinations)
-        {
-            this.startLocation = startLocation;
-            this.endLocation = endLocation;
-            this.destinations = destinations;
-        }
-
-        public void Validate()
-        {
-	    if (this == null)
-            {
-                throw new Exception("Schedule is null");
-            }
-	    
-            if (this.startLocation == null)
-            {
-                throw new Exception("Start location is null/empty");
-            }
-
-            if (this.endLocation == null)
-            {
-                throw new Exception("End location is null/empty");
-            }
-        }
+        public String StartLocation { get; set; }
+        public String EndLocation { get; set; }
+        public readonly DateTime startTime, stopTime;
+        public readonly List<Destination> destinations;
     }
 }
