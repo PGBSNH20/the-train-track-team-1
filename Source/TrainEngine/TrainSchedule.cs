@@ -1,34 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace TrainEngine
 {
-    public class Destination
+    public class Location
     {
         public DateTime arrivalTime, departureTime;
         public String destinationName;
 
-        public Destination(DateTime arrivalTime, DateTime departureTime, String destinationName)
+        public Location(String arrivalTime, String departureTime, String destinationName)
         {
-            this.arrivalTime = arrivalTime;
-            this.departureTime = departureTime;
+            this.arrivalTime = DateTime.ParseExact(arrivalTime, "yyyy/MM/dd HH:mm", CultureInfo.InvariantCulture);
+            this.departureTime = DateTime.ParseExact(departureTime, "yyyy/MM/dd HH:mm", CultureInfo.InvariantCulture);
             this.destinationName = destinationName;
         }
     }
 
     public class TrainSchedule
     {
-        public String StartLocation { get; set; }
-        public String EndLocation { get; set; }
-        public readonly DateTime startTime, stopTime;
-        public readonly List<Destination> destinations;
+        public Location startLocation { get; set; }
+        public Location endLocation { get; set; }
+        public readonly List<Location> destinations;
 
-        public TrainSchedule(String startLocation, String endLocation, DateTime startTime, DateTime stopTime, List<Destination> destinations)
+        public TrainSchedule(Location startLocation, Location endLocation, List<Location> destinations)
         {
-            this.StartLocation = startLocation;
-            this.EndLocation = endLocation;
-            this.startTime = startTime;
-            this.stopTime = stopTime;
+            this.startLocation = startLocation;
+            this.endLocation = endLocation;
             this.destinations = destinations;
         }
 
@@ -39,12 +37,12 @@ namespace TrainEngine
                 throw new Exception("Schedule is null");
             }
 	    
-            if (String.IsNullOrEmpty(this.StartLocation) || String.IsNullOrWhiteSpace(this.StartLocation))
+            if (this.startLocation == null)
             {
                 throw new Exception("Start location is null/empty");
             }
 
-            if (String.IsNullOrEmpty(this.EndLocation) || String.IsNullOrWhiteSpace(this.EndLocation))
+            if (this.endLocation == null)
             {
                 throw new Exception("End location is null/empty");
             }
