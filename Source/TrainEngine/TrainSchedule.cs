@@ -22,7 +22,7 @@ namespace TrainEngine
         public String EndLocation { get; set; }
         public readonly DateTime startTime, stopTime;
         public readonly List<Destination> destinations;
-
+        
         public TrainSchedule(String startLocation, String endLocation, DateTime startTime, DateTime stopTime, List<Destination> destinations)
         {
             StartLocation = startLocation;
