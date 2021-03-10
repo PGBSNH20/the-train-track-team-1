@@ -7,6 +7,8 @@ namespace TrainEngine
     {
         public String StartLocation { get; set; }
         public String EndLocation { get; set; }
+        public List<string> intermediateStations { get; set; }
         public long TotalDistance { get; set; }
     }
+    
 }
