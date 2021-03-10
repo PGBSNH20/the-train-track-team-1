@@ -8,17 +8,19 @@ namespace TrainConsole
     {
         static void Main(string[] args)
         {
-            TrainSchedule schedule = new TrainSchedule("Göteborg", "Stockholm", 
+            TrainSchedule schedule = new TrainSchedule("Göteborg", "Stockholm",
                 new DateTime(2021, 03, 08, 15, 30, 00), new DateTime(2021, 03, 08, 18, 30, 00), new List<Destination>()
                 {
-                    new Destination(new DateTime(2021, 03, 08, 15, 31, 00), new DateTime(2021, 03, 08, 15, 32, 00), "Alingsås"),
-                    new Destination(new DateTime(2021, 03, 08, 15, 33, 00), new DateTime(2021, 03, 08, 15, 34, 00), "Vårgårda"),
-                    new Destination(new DateTime(2021, 03, 08, 15, 35, 00), new DateTime(2021, 03, 08, 15, 36, 00), "Herrljunga"),
-                    new Destination(new DateTime(2021, 03, 08, 15, 37, 00), new DateTime(2021, 03, 08, 15, 38, 00), "Falköping"),
-                });;
+                    new Destination(new DateTime(2021, 03, 08, 15, 35, 00), new DateTime(2021, 03, 08, 15, 36, 00), "Alingsås"),
+                    new Destination(new DateTime(2021, 03, 08, 15, 42, 00), new DateTime(2021, 03, 08, 15, 44, 00), "Vårgårda"),
+                    new Destination(new DateTime(2021, 03, 08, 15, 50, 00), new DateTime(2021, 03, 08, 15, 59, 00), "Herrljunga"),
+                    new Destination(new DateTime(2021, 03, 08, 16, 04, 00), new DateTime(2021, 03, 08, 16, 05, 00), "Falköping"),
+                });
 
-            TrainPlanner planner = new TrainPlanner();
-            planner.FollowSchedule(schedule);
+            Train train = new Train(0, "X-2000", 250, true);
+            TrackIO trackIO = new TrackIO();
+
+            TrainSimulation simulation = new TrainSimulation(100, trackIO.ParseTrack()).AddSchedule(schedule).AddTrain(train).StartSimulation();
         }
     }
 }

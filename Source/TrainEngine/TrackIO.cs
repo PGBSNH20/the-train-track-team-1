@@ -11,7 +11,7 @@ namespace TrainEngine
         {
             Track track = new Track();
             
-            StreamReader parser = new StreamReader(Environment.CurrentDirectory + @"/track.txt");
+            StreamReader parser = new StreamReader(Environment.CurrentDirectory + @"\track.txt");
             string input;
             while ((input = parser.ReadLine()) != null)
             {
@@ -41,7 +41,7 @@ namespace TrainEngine
                 {
                     if (c == '-')
                     {
-                        x += 10;
+                        x++;
                     }
                 }
                 return x;

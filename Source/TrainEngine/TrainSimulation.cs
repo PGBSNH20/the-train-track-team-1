@@ -7,11 +7,13 @@ namespace TrainEngine
     public class TrainSimulation
     {
         private double realtimeMultiplier; // Realtime divided by times value (ex 10 is 10x faster)
+        private Track track;
         private Train train = null;
         private TrainSchedule schedule = null;
-        public TrainSimulation(double realtimeMultiplier)
+        public TrainSimulation(double realtimeMultiplier, Track track)
         {
             this.realtimeMultiplier = realtimeMultiplier;
+            this.track = track;
         }
 
         public TrainSimulation AddTrain(Train train)
@@ -74,7 +76,7 @@ namespace TrainEngine
                 }
             }
 
-            Console.WriteLine($"\nFinal destination {schedule.EndLocation} has been reached. - {currentTime.TimeOfDay}");
+            Console.WriteLine($"\nFinal destination {schedule.EndLocation} has been reached. @{currentTime.TimeOfDay}");
             return this;
         }
 
