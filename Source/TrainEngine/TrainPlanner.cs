@@ -4,7 +4,7 @@ namespace TrainEngine
 {
     public class TrainPlanner
     {
-        public void FollowSchedule(TrainSchedule schedule)
+        /*public void FollowSchedule(TrainSchedule schedule)
         {
             if (schedule == null)
             {
@@ -18,8 +18,6 @@ namespace TrainEngine
             {
                 throw new Exception("End location is null/empty");
             }
-
-
-        }
+        }*/
     }
 }
