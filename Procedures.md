@@ -42,9 +42,9 @@ The result of the spying is a comment in the code like this:
 
 On **Wednesday 17th of March 9:30**, will each group do a mini presentation. You should long before the presentation have made decision in the group who is going to do the talking.
 
-Be sharp you only have **5 min** including attaching your computer.
+Be sharp you only have **5 min**.
 
-The rest of class will give a vote on paper, scale is 1-5, this vote is placed into the hat of the group.
+The rest of class will after the presentation give a vote on using Discord (as a PM to teacher), scale is 1-5 (see below).
 
 ### When voting
 
@@ -57,5 +57,12 @@ Look for the following in the presentation:
 - Patterns
 - Readiness
 - Presentation
-
 - Timing
+
+### Voting
+
+When voting send a PM to the **teacher** with you vote, on the following format `[YOUR TEAM NUMBER];[NUMBER OF TEAM GETTING VOTE];[VOTE]`
+
+Example:
+
+You are part of team 9 and are about to vote for team 10, you which to give the vote 3. In that case you send the following PM: `9;10;3`
