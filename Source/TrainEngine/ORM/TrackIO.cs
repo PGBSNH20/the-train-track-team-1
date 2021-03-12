@@ -1,46 +1,49 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace TrainEngine
 {
-    public class TrackIO
+    public class TrackIO : ITrackIO
     {
-        public Track ParseTrack()
+        public _Track Track { get; set; }
+        private string Input;
+        public TrackIO(string input)
         {
-            var track = new Track();
-            var parser = new StreamReader(Environment.CurrentDirectory + @"/track.txt");
+            Track = new _Track();
+            Track.IntermediateStations = new List<Station>();
+            Input = input;
+        }
+        public void Parse()
+        {
+            var parser = new StreamReader(Input);
             string input;
-            var intermediateStations = new List<string>();
-            while ((input = parser.ReadLine()) != null)
+            while ((input = parser.ReadLine()) != null && (!String.IsNullOrWhiteSpace(input)))
             {
                 var formattedStations = Regex.Replace(input, "[^A-Z]", string.Empty);
                 foreach (var c in formattedStations)
                 {
                     if (c != 'A' && c != formattedStations.Last())
                     {
-                        intermediateStations.Add(c.ToString());
+                        Track.IntermediateStations.Add(new Station() {Name = c.ToString(), Distance = 5});
                     }
                     else if (c == 'A')
                     {
-                        track.StartLocation = c.ToString();
+                        Track.StartLocation = c.ToString();
                     }
                     else
                     {
-                        track.EndLocation = c.ToString();
+                        Track.EndLocation = c.ToString();
                     }
                 }
-                track.TotalDistance = ReturnDistance(input);
+                Track.TotalDistance = ReturnDistance(input);
             }
             parser.Close();
-            track.intermediateStations = intermediateStations;
-            return track;
         }
         private static long ReturnDistance(string input)
         {
-            
             long x = 0;
             try
             {
@@ -50,11 +53,12 @@ namespace TrainEngine
                     {
                         x++;
                     }
-                    else if (c == '=') 
+                    else if (c == '=')
                     {
                         //Do stuff!
                     }
                 }
+
                 return x;
             }
             catch (Exception ex)
@@ -62,8 +66,13 @@ namespace TrainEngine
                 Console.WriteLine(ex.Message);
                 throw;
             }
-         
-            
+        }
+        public class _Track
+        {
+            public string StartLocation { get; set; }
+            public string EndLocation { get; set; }
+            public List<Station> IntermediateStations { get; set; }
+            public long TotalDistance { get; set; }
         }
     }
 }

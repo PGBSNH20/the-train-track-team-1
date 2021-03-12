@@ -8,17 +8,16 @@ namespace TrainConsole
     {
         static void Main(string[] args)
         {
-            TrainSchedule schedule = new TrainSchedule("Göteborg", "Stockholm", 
-                new DateTime(2021, 03, 08, 15, 30, 00), new DateTime(2021, 03, 08, 18, 30, 00), new List<Destination>()
-                {
-                    new Destination(new DateTime(2021, 03, 08, 15, 31, 00), new DateTime(2021, 03, 08, 15, 32, 00), "Alingsås"),
-                    new Destination(new DateTime(2021, 03, 08, 15, 33, 00), new DateTime(2021, 03, 08, 15, 34, 00), "Vårgårda"),
-                    new Destination(new DateTime(2021, 03, 08, 15, 35, 00), new DateTime(2021, 03, 08, 15, 36, 00), "Herrljunga"),
-                    new Destination(new DateTime(2021, 03, 08, 15, 37, 00), new DateTime(2021, 03, 08, 15, 38, 00), "Falköping"),
-                });;
-
-            TrainPlanner planner = new TrainPlanner();
-            planner.FollowSchedule(schedule);
+            ITrackIO trackIO = new TrackIO(Environment.CurrentDirectory + @"/track.txt");
+            trackIO.Parse();
+            Console.WriteLine($"Start: {trackIO.Track.StartLocation}\n");
+            Console.WriteLine("Intermediate stations!");
+            foreach (var station in trackIO.Track.IntermediateStations)
+            {
+                Console.WriteLine($"Name:{station.Name}\nDistance: {station.Distance}");
+            }
+            Console.WriteLine($"\nEnd: {trackIO.Track.EndLocation}");
+            Console.WriteLine($"Total distance: {trackIO.Track.TotalDistance}");
         }
     }
 }
