@@ -22,11 +22,13 @@ namespace TrainEngine
         public Location startLocation { get; set; }
         public Location endLocation { get; set; }
         public readonly List<Location> destinations;
+        public readonly DateTime startTime, stopTime;
 
         public TrainSchedule(Location startLocation, Location endLocation, List<Location> destinations)
-        public String StartLocation { get; set; }
-        public String EndLocation { get; set; }
-        public readonly DateTime startTime, stopTime;
-        public readonly List<Destination> destinations;
+        {
+            this.startLocation = startLocation;
+            this.endLocation = endLocation;
+            this.destinations = destinations;
+        }
     }
 }

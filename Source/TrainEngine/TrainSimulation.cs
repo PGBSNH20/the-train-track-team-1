@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using static TrainEngine.TrackIO;
 
 namespace TrainEngine
 {
     public class TrainSimulation
     {
         private double realtimeMultiplier; // Realtime divided by times value (ex 10 is 10x faster)
-        private Track track;
+        private _Track track;
         private Train train = null;
         private TrainSchedule schedule = null;
-        public TrainSimulation(double realtimeMultiplier, Track track)
+        public TrainSimulation(double realtimeMultiplier, _Track track)
         {
             this.realtimeMultiplier = realtimeMultiplier;
             this.track = track;
@@ -44,12 +45,12 @@ namespace TrainEngine
 
             DateTime currentTime = schedule.startTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
-                $"{schedule.StartLocation} - {schedule.EndLocation} at {schedule.startTime}");
+                $"{schedule.startLocation} - {schedule.endLocation} at {schedule.startTime}");
 
-            List<Destination> passedDestinations = new List<Destination>();
-            foreach (Destination dest in schedule.destinations)
+            List<Location> passedDestinations = new List<Location>();
+            foreach (Location dest in schedule.destinations)
             {
-                Console.WriteLine($"Departuring from {schedule.StartLocation} at {currentTime}");
+                Console.WriteLine($"Departuring from {schedule.startLocation} at {currentTime}");
 
                 int passedDestinationsLength = passedDestinations.Count;
                 while (passedDestinations.Count == passedDestinationsLength)
@@ -76,7 +77,7 @@ namespace TrainEngine
                 }
             }
 
-            Console.WriteLine($"\nFinal destination {schedule.EndLocation} has been reached. @{currentTime.TimeOfDay}");
+            Console.WriteLine($"\nFinal destination {schedule.endLocation} has been reached. @{currentTime.TimeOfDay}");
             return this;
         }
 
