@@ -7,10 +7,10 @@ namespace TrainEngine
     public class TrainSimulation
     {
         private double realtimeMultiplier; // Realtime divided by times value (ex 10 is 10x faster)
-        private Track track;
+        private ITrackIO track;
         private Train train = null;
         private TrainSchedule schedule = null;
-        public TrainSimulation(double realtimeMultiplier, Track track)
+        public TrainSimulation(double realtimeMultiplier, ITrackIO track)
         {
             this.realtimeMultiplier = realtimeMultiplier;
             this.track = track;
@@ -42,14 +42,14 @@ namespace TrainEngine
             // Checks to see if everything is in order for the simulation i.e a train & schedule exists
             ValidateSimulation();
 
-            DateTime currentTime = schedule.startTime;
+            DateTime currentTime = schedule.startLocation.departureTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
-                $"{schedule.StartLocation} - {schedule.EndLocation} at {schedule.startTime}");
+                $"{schedule.startLocation} - {schedule.endLocation} at {schedule.startLocation.departureTime}");
 
-            List<Destination> passedDestinations = new List<Destination>();
-            foreach (Destination dest in schedule.destinations)
+            List<Location> passedDestinations = new List<Location>();
+            foreach (Location dest in schedule.destinations)
             {
-                Console.WriteLine($"Departuring from {schedule.StartLocation} at {currentTime}");
+                Console.WriteLine($"Departuring from {dest.destinationName} at {currentTime}");
 
                 int passedDestinationsLength = passedDestinations.Count;
                 while (passedDestinations.Count == passedDestinationsLength)
@@ -76,7 +76,7 @@ namespace TrainEngine
                 }
             }
 
-            Console.WriteLine($"\nFinal destination {schedule.EndLocation} has been reached. @{currentTime.TimeOfDay}");
+            Console.WriteLine($"\nFinal destination {schedule.endLocation.destinationName} has been reached. @{currentTime.TimeOfDay}");
             return this;
         }
 

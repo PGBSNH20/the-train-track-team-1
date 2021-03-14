@@ -20,9 +20,10 @@ namespace TrainConsole
             TrainSchedule schedule = new TrainSchedule(startLocation, endLocation, destinations);
           
             Train train = new Train(0, "X-2000", 250, true);
+            // What input? File? Text? Binaries? Path?
             TrackIO trackIO = new TrackIO();
 
-            TrainSimulation simulation = new TrainSimulation(100, trackIO.ParseTrack()).AddSchedule(schedule).AddTrain(train).StartSimulation();
+            TrainSimulation simulation = new TrainSimulation(100, trackIO).AddSchedule(schedule).AddTrain(train).StartSimulation();
         }
     }
 }
