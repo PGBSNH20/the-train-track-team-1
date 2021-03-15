@@ -22,7 +22,6 @@ namespace TrainEngine
         public Location startLocation { get; set; }
         public Location endLocation { get; set; }
         public readonly List<Location> destinations;
-        public readonly DateTime startTime, stopTime;
 
         public TrainSchedule(Location startLocation, Location endLocation, List<Location> destinations)
         {

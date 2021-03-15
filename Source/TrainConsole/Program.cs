@@ -20,9 +20,10 @@ namespace TrainConsole
             TrainSchedule schedule = new TrainSchedule(startLocation, endLocation, destinations);
           
             Train train = new Train(0, "X-2000", 250, true);
-            TrackIO trackIO = new TrackIO();
+            TrackIO trackIO = new TrackIO("(A)----(C)-------(B)");
+            trackIO.Parse();
 
-            TrainSimulation simulation = new TrainSimulation(100, trackIO.ParseTrack()).AddSchedule(schedule).AddTrain(train).StartSimulation();
+            TrainSimulation simulation = new TrainSimulation(100, trackIO.Track).AddSchedule(schedule).AddTrain(train).StartSimulation();
         }
     }
 }

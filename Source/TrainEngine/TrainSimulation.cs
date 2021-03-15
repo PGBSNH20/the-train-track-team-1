@@ -29,7 +29,7 @@ namespace TrainEngine
         }
         public TrainSimulation AddSchedule(TrainSchedule schedule)
         {
-            if(this.schedule != null)
+            if (this.schedule != null)
             {
                 throw new Exception("There can only be on schedule");
             }
@@ -43,14 +43,15 @@ namespace TrainEngine
             // Checks to see if everything is in order for the simulation i.e a train & schedule exists
             ValidateSimulation();
 
-            DateTime currentTime = schedule.startTime;
+            DateTime currentTime = schedule.startLocation.departureTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
-                $"{schedule.startLocation} - {schedule.endLocation} at {schedule.startTime}");
+                $"{schedule.startLocation.destinationName} - {schedule.endLocation.destinationName} at {schedule.startLocation.departureTime}");
 
             List<Location> passedDestinations = new List<Location>();
+            int trainPositionIndex = 0;
             foreach (Location dest in schedule.destinations)
             {
-                Console.WriteLine($"Departuring from {schedule.startLocation} at {currentTime}");
+                Console.WriteLine($"Departuring from {schedule.startLocation.destinationName} at {currentTime}");
 
                 int passedDestinationsLength = passedDestinations.Count;
                 while (passedDestinations.Count == passedDestinationsLength)
@@ -58,12 +59,17 @@ namespace TrainEngine
                     Console.WriteLine("..---.....---..");
 
                     Thread.Sleep((int)(60000 / realtimeMultiplier));
-                    currentTime = currentTime.AddMinutes(1);
+                    trainPositionIndex++;
 
-                    if (currentTime >= dest.arrivalTime)
+                    foreach (Station s in track.IntermediateStations)
                     {
-                        passedDestinations.Add(dest);
+                        Console.WriteLine($"S distance: {s.Distance}");
+                        if (s.Distance == trainPositionIndex)
+                        {
+                            passedDestinations.Add(dest);
+                        }
                     }
+
                 }
 
                 Console.WriteLine($"Arrived at {dest.destinationName} at {currentTime}");
@@ -77,13 +83,13 @@ namespace TrainEngine
                 }
             }
 
-            Console.WriteLine($"\nFinal destination {schedule.endLocation} has been reached. @{currentTime.TimeOfDay}");
+            Console.WriteLine($"\nFinal destination {schedule.endLocation.destinationName} has been reached. @{currentTime.TimeOfDay}");
             return this;
         }
 
         private void ValidateSimulation()
         {
-            if(train == null)
+            if (train == null)
             {
                 throw new Exception("You need a train in order to start the simulation");
             }
@@ -91,6 +97,10 @@ namespace TrainEngine
             if (schedule == null)
             {
                 throw new Exception("You need a schedule in order to start the simulation");
+            }
+            if (track == null)
+            {
+                throw new Exception("You need a track in order to start the simulation");
             }
         }
     }
