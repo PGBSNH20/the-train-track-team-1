@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TrainEngine
 {
-    public class TrainScheduleIO
+    public class TrainPlanIO
     {
-        public static void Save(TrainSchedule Schedule, string NameOfFile)
+        public static void Save(Location Destinations, string NameOfFile)
         {
             string DocPath = Environment.CurrentDirectory;
             if (File.Exists($"{DocPath}\\{NameOfFile}.txt"))
@@ -19,9 +19,13 @@ namespace TrainEngine
             {
                 string[] lines =
                 {
-                   $"{Schedule.startLocation.arrivalTime}, {Schedule.startLocation.departureTime}, {Schedule.startLocation.destinationName}",
-                   $"{Schedule.endLocation.arrivalTime}, {Schedule.endLocation.departureTime}, {Schedule.endLocation.destinationName}"
+                   $"{Destinations.departureTime}, {Destinations.destinationName}",
                 };
+
+                foreach (Location Destination in Destinations)
+                {
+
+                }
 
                 using (StreamWriter outputFile = new StreamWriter(Path.Combine(DocPath, $"{NameOfFile}.txt"))) 
                 {
