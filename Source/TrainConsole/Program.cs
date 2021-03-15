@@ -14,7 +14,11 @@ namespace TrainConsole
             
             Train[] trains = Train.ParseTrain("trains.txt");
             trackIO.Parse();
+
             
+            //TrainSchedule.SaveRoute(destinations, "Route2"); 
+            //TrackIO.ExportTrack("[A]------[B]----[C]---[D]---=--[E]---[F]", "Route2");
+
             TrainSimulation simulation = new TrainSimulation(100, trackIO).AddDestinations(destinations).AddTrain(trains[0]).StartSimulation(); 
             //trains[0] because we only have one train at the moment. But trains.txt can and will contain multiple ones.
         }

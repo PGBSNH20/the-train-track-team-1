@@ -40,5 +40,41 @@ namespace TrainEngine
                 throw new Exception("Parsing failed; Locations count is 0. Are route.txt empty?");
             }
         }
+
+        public static void SaveRoute(List<Location> destinations, string safeFileName)
+        {
+            if (File.Exists(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt"))
+            {
+                Console.WriteLine("File already exists try Loading it insead");
+            }
+            else
+            {
+                List<string> lines = new List<string>();
+
+                foreach (Location destination in destinations)
+                {
+                    lines.Add($"{destination.departureTime.ToString("g").Replace("-", "/")}|{destination.destinationName}");
+                }
+
+                try
+                {
+                    Directory.CreateDirectory(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName);
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                using (StreamWriter outputFile = new StreamWriter(Environment.CurrentDirectory+ "/TrainRoutes/" + safeFileName + "/route.txt"))
+                {
+                    foreach (string line in lines)
+                    {
+                        outputFile.WriteLine(line);
+                    }
+                }
+            }
+
+        }
     }
 }
