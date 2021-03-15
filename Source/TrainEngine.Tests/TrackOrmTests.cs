@@ -6,33 +6,35 @@ namespace TrainEngine.Tests
     public class TrackOrmTests
     {
         [Fact]
-        public void When_OnlyAStationIsProvided_Expect_TheResultOnlyToContainAStationWithId1()
+        public void OneTrackWithOnlyEndAndStartStations()
         {
             // Arrange
-            string track = "[1]";
-            TrackOrm trackOrm = new TrackOrm();
+            ITrackIO trackOrm = new TrackIO();
+            trackOrm.Parse();
 
             // Act
-            var result = trackOrm.ParseTrackDescription(track);
+            var result = 0;
+            if (!String.IsNullOrWhiteSpace(trackOrm.Track.EndLocationID) && !String.IsNullOrWhiteSpace(trackOrm.Track.EndLocationID))
+            {
+                result = 2;
+            }
 
             // Assert
-            //Assert.IsType<Station>(result.TackPart[0]);
-            //Station s = (Station)result.TackPart[0];
-            //Assert.Equal(1, s.Id);
+            Assert.Equal(2, result);
         }
 
         [Fact]
-        public void When_ProvidingTwoStationsWithOneTrackBetween_Expect_TheTrackToConcistOf3Parts()
+        public void OneTrackWithIntermediateStations()
         {
             // Arrange
-            string track = "[1]-[2]";
-            TrackOrm trackOrm = new TrackOrm();
-            
+            ITrackIO trackOrm = new TrackIO();
+            trackOrm.Parse();
+
             // Act
-            var result = trackOrm.ParseTrackDescription(track);
+            var result = trackOrm.Track.IntermediateStationsID.Count;
 
             // Assert
-            Assert.Equal(3, result.NumberOfTrackParts);
+            Assert.Equal(1, result);
         }
     }
 }
