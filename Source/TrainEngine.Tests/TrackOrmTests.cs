@@ -13,14 +13,12 @@ namespace TrainEngine.Tests
             trackOrm.Parse();
 
             // Act
-            var result = 0;
-            if (!String.IsNullOrWhiteSpace(trackOrm.Track.EndLocationID) && !String.IsNullOrWhiteSpace(trackOrm.Track.EndLocationID))
-            {
-                result = 2;
-            }
+            var First = trackOrm.Track.StationsID[1];
+            var Last = trackOrm.Track.StationsID[trackOrm.Track.StationsID.Count - 1];
+            Station[] result = {First, Last};
 
             // Assert
-            Assert.Equal(2, result);
+            Assert.Equal(2, result.Length);
         }
 
         [Fact]
@@ -31,10 +29,10 @@ namespace TrainEngine.Tests
             trackOrm.Parse();
 
             // Act
-            var result = trackOrm.Track.IntermediateStationsID.Count;
+            var result = trackOrm.Track.StationsID.Count;
 
             // Assert
-            Assert.Equal(1, result);
+            Assert.Equal(3, result);
         }
     }
 }
