@@ -9,17 +9,16 @@ namespace TrainEngine
     public class TrackIO : ITrackIO
     {
         public _Track Track { get; set; }
-        
-        private string Input = Environment.CurrentDirectory + @"/track.txt";
-        public TrackIO()
+        private string SafeFileName;
+        public TrackIO(string safeFileName)
         {
             Track = new _Track();
-            
+            SafeFileName = safeFileName;
             Track.StationsID = new List<Station>();
         }
         public void Parse()
         {
-            var parser = new StreamReader(Input);
+            var parser = new StreamReader(Environment.CurrentDirectory + "/TrainRoutes/" + SafeFileName + "/track.txt");
             string input;
             while ((input = parser.ReadLine()) != null && (!String.IsNullOrWhiteSpace(input)))
             {
