@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TrainEngine
+namespace TrainEngine.Models
 {
     public class TrackDescription
     {

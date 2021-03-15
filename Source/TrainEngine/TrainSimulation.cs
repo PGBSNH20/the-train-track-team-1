@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using TrainEngine.Models;
+using TrainEngine.Interfaces;
 
 namespace TrainEngine
 {
-    public class TrainSimulation
+    public class TrainSimulation : ITrainSimulation
     {
         private double realtimeMultiplier; // Realtime divided by times value (ex 10 is 10x faster)
         private ITrackIO trackIO;
@@ -17,7 +19,7 @@ namespace TrainEngine
             this.trackIO = trackIO;
         }
 
-        public TrainSimulation AddTrain(Train train)
+        public ITrainSimulation AddTrain(Train train)
         {
             if (this.train != null)
             {
@@ -27,7 +29,7 @@ namespace TrainEngine
             this.train = train;
             return this;
         }
-        public TrainSimulation AddDestinations(List<Location> locations)
+        public ITrainSimulation AddDestinations(List<Location> locations)
         {
             if (this.locations != null)
             {
@@ -38,10 +40,10 @@ namespace TrainEngine
             return this;
         }
 
-        public TrainSimulation StartSimulation()
+        public void Start()
         {
             // Checks to see if everything is in order for the simulation i.e a train & locations exists
-            ValidateSimulation();
+            Validate();
 
             currentTime = locations[0].departureTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
@@ -98,10 +100,9 @@ namespace TrainEngine
             }
 
             Console.WriteLine($"\nFinal destination {locations[locations.Count - 1].destinationName} has been reached. @{currentTime.TimeOfDay}");
-            return this;
         }
 
-        private void ValidateSimulation()
+        private void Validate()
         {
             if (train == null)
             {

@@ -1,24 +1,13 @@
 ﻿using System.IO;
 using System;
 using System.Collections.Generic;
+using TrainEngine.Models;
 namespace TrainEngine
 {
-    public class Train
+    public class TrainSomethingYouCanChooseABetterName
     {
-        public int id;
-        public string name;
-        public double maxSpeedKmh;
-        public bool inUse;
 
-        public Train(int id, string name, double maxSpeedKmh, bool inUse)
-        {
-            this.id = id;
-            this.name = name;
-            this.maxSpeedKmh = maxSpeedKmh;
-            this.inUse = inUse;
-        }
-
-        public static Train[] ParseTrain(string safeFileName)
+        public Train[] Parse(string safeFileName)
         {
             StreamReader reader = new StreamReader(Environment.CurrentDirectory + "/" + safeFileName);
             List<Train> trains = new List<Train>();
@@ -30,14 +19,12 @@ namespace TrainEngine
                 trains.Add(train);
             }
 
-            if (trains.Count > 0)
-            {
-                return trains.ToArray();
-            }
-            else
+            if (trains.Count <= 0)
             {
                 throw new Exception("The amount of trains is parsed to 0. Is trains.txt empty?");
             }
+
+            return trains.ToArray();
         }
     }
 }

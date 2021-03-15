@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using TrainEngine.Models;
 namespace TrainEngine
 {
     public interface ITrackIO
     {
-        TrackIO._Track Track { get; set; }
+        Track Track { get; set; }
         void Parse();
     }
 }

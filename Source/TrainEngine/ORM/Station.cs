@@ -7,7 +7,7 @@ namespace TrainEngine
         public string ID { get; set; }
         public long Distance { get; set; }
 
-        public static string ReturnStationName(char id)
+        public static string GetNameByID(char id)
         {
             StreamReader reader = new StreamReader(Environment.CurrentDirectory + "/stations.txt");
             string input;
@@ -32,7 +32,7 @@ namespace TrainEngine
             
         }
 
-        public static char ReturnStationID(string name)
+        public static char GetIDByName(string name)
         {
             StreamReader reader = new StreamReader(Environment.CurrentDirectory + "/stations.txt");
             string input;

@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using TrainEngine.Models;
 
 namespace TrainEngine
 {
     public class TrackIO : ITrackIO
     {
-        public _Track Track { get; set; }
+        public Track Track { get; set; }
         private string SafeFileName;
         public TrackIO(string safeFileName)
         {
-            Track = new _Track();
+            Track = new Track();
             SafeFileName = safeFileName;
             Track.StationsID = new List<Station>();
         }
@@ -38,7 +39,6 @@ namespace TrainEngine
             try
             {
                 Directory.CreateDirectory(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName);
-
             }
             catch (Exception)
             {
@@ -54,82 +54,44 @@ namespace TrainEngine
 
         private static long ReturnStationDistance(string track, char id)
         {
-            try
+            long distance = 0;
+            track = Regex.Replace(track, "[^" + id + "-]", string.Empty);
+            track = track.Remove(track.IndexOf(id) + 1, track.Length - track.IndexOf(id) - 1);
+            foreach (var c in track)
             {
-                long distance = 0;
-                track = Regex.Replace(track, "[^" + id + "-]", string.Empty);
-                track = track.Remove(track.IndexOf(id) + 1, track.Length - track.IndexOf(id) - 1);
-                foreach (var c in track)
+                if (c == '-')
                 {
-                    if (c == '-')
-                    {
-                        distance++; //Add a KM
-                    }
+                    distance++; //Add a KM
                 }
-                return distance;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            return distance;
         }
         private static long ReturnLeveLCrossingDistance(string track)
         {
-            try
+            track = Regex.Replace(track, "[^-=]", string.Empty);
+            long levelCrossingDistance = 0;
+            track = track.Remove(track.IndexOf('=') + 1, track.Length - track.IndexOf('=') - 1);
+            foreach (var i in track)
             {
-                track = Regex.Replace(track, "[^-=]", string.Empty);
-                long levelCrossingDistance = 0;
-                track = track.Remove(track.IndexOf('=') + 1, track.Length - track.IndexOf('=') - 1);
-                foreach (var i in track)
+                if (i == '-')
                 {
-                    if (i == '-')
-                    {
-                        levelCrossingDistance++; //Add a KM
-                    }
+                    levelCrossingDistance++; //Add a KM
                 }
-                return levelCrossingDistance;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            return levelCrossingDistance;
         }
         private static long ReturnTotalDistance(string input)
         {
             long distance = 0;
-            try
+
+            foreach (var c in input)
             {
-                foreach (var c in input)
+                if (c == '-')
                 {
-                    if (c == '-')
-                    {
-                        distance++; //Add a KM
-                    }
+                    distance++; //Add a KM
                 }
-                return distance;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-        }
-        public class _Track
-        {
-            public _LevelCrossing LevelCrossing { get; }
-            public List<Station> StationsID { get; set; }
-            public long TotalDistance { get; set; }
-            public _Track()
-            {
-                LevelCrossing = new _Track._LevelCrossing();
-            }
-            public class _LevelCrossing
-            {
-                public long Location { get; set; } //The location which the level crossing occurs measured in KM
-            }
-            
+            return distance;
         }
     }
 }

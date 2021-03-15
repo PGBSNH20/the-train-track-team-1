@@ -2,21 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using TrainEngine.Models;
 namespace TrainEngine
 {
-    public class Location
-    {
-        public DateTime departureTime;
-        public String destinationName;
-
-        public Location(String departureTime, String destinationName)
-        {
-            this.departureTime = DateTime.ParseExact(departureTime, "yyyy/MM/dd HH:mm", CultureInfo.InvariantCulture);
-            this.destinationName = destinationName;
-        }
-
-        
-    }
 
     public class TrainSchedule
     {
@@ -31,14 +19,18 @@ namespace TrainEngine
                 locations.Add(new Location(data[0], data[1]));
             }
 
-            if (locations.Count > 0)
-            {
-                return locations;
-            }
-            else
+            if (locations.Count <= 0)
             {
                 throw new Exception("Parsing failed; Locations count is 0. Are route.txt empty?");
             }
+
+            return locations;
+        }
+
+        public static void GenerateRoute(string safeFileName, List<Location> destinations)
+        {
+            TrainSchedule.SaveRoute(destinations, "Route1"); 
+            TrackIO.ExportTrack("[A]------[B]----[C]---[D]---=--[E]---[F]", "Route1");
         }
 
         public static void SaveRoute(List<Location> destinations, string safeFileName)
@@ -46,35 +38,31 @@ namespace TrainEngine
             if (File.Exists(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt"))
             {
                 Console.WriteLine("File already exists try Loading it insead");
+                return;
             }
-            else
+            List<string> lines = new List<string>();
+
+            foreach (Location destination in destinations)
             {
-                List<string> lines = new List<string>();
-
-                foreach (Location destination in destinations)
-                {
-                    lines.Add($"{destination.departureTime.ToString("g").Replace("-", "/")}|{destination.destinationName}");
-                }
-
-                try
-                {
-                    Directory.CreateDirectory(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName);
-
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
-                using (StreamWriter outputFile = new StreamWriter(Environment.CurrentDirectory+ "/TrainRoutes/" + safeFileName + "/route.txt"))
-                {
-                    foreach (string line in lines)
-                    {
-                        outputFile.WriteLine(line);
-                    }
-                }
+                lines.Add($"{destination.departureTime.ToString("g").Replace("-", "/")}|{destination.destinationName}");
             }
 
+            try
+            {
+                Directory.CreateDirectory(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            using (StreamWriter outputFile = new StreamWriter(Environment.CurrentDirectory+ "/TrainRoutes/" + safeFileName + "/route.txt"))
+            {
+                foreach (string line in lines)
+                {
+                outputFile.WriteLine(line);
+                }
+            }
         }
     }
 }
