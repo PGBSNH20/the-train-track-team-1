@@ -33,6 +33,7 @@ namespace TrainConsole
                 }
                 
              */
+            TrainScheduleIO.Load("test");
             TrainSimulation simulation = new TrainSimulation(100, trackIO).AddSchedule(schedule).AddTrain(train).StartSimulation();
         }
     }
