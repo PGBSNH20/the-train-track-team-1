@@ -1,0 +1,5 @@
+Alingsås|A
+Vårgårda|B
+Falköping|C
+Göteborg|D
+Stockholm|E
