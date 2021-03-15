@@ -13,7 +13,7 @@ namespace TrainEngine
         public TrackIO()
         {
             Track = new _Track();
-            Track.IntermediateStations = new List<Station>();
+            Track.IntermediateStationsID = new List<Station>();
         }
         public void Parse()
         {
@@ -26,15 +26,15 @@ namespace TrainEngine
                 {
                     if (c != 'A' && c != formattedStations.Last())
                     {
-                        Track.IntermediateStations.Add(new Station() {Name = c.ToString(), Distance = 5});
+                        Track.IntermediateStationsID.Add(new Station() {ID = c.ToString(), Distance = 5});
                     }
                     else if (c == 'A')
                     {
-                        Track.StartLocation = c.ToString();
+                        Track.StartLocationID = c.ToString();
                     }
                     else
                     {
-                        Track.EndLocation = c.ToString();
+                        Track.EndLocationID = c.ToString();
                     }
                 }
                 Track.TotalDistance = ReturnDistance(input);
@@ -68,9 +68,9 @@ namespace TrainEngine
         }
         public class _Track
         {
-            public string StartLocation { get; set; }
-            public string EndLocation { get; set; }
-            public List<Station> IntermediateStations { get; set; }
+            public string StartLocationID { get; set; }
+            public string EndLocationID{ get; set; }
+            public List<Station> IntermediateStationsID { get; set; }
             public long TotalDistance { get; set; }
         }
     }

@@ -7,13 +7,13 @@ namespace TrainEngine
     public class TrainSimulation
     {
         private double realtimeMultiplier; // Realtime divided by times value (ex 10 is 10x faster)
-        private ITrackIO track;
+        private ITrackIO TrackIO;
         private Train train = null;
         private TrainSchedule schedule = null;
-        public TrainSimulation(double realtimeMultiplier, ITrackIO track)
+        public TrainSimulation(double realtimeMultiplier, ITrackIO trackIO)
         {
             this.realtimeMultiplier = realtimeMultiplier;
-            this.track = track;
+            this.TrackIO = trackIO;
         }
 
         public TrainSimulation AddTrain(Train train)
@@ -39,9 +39,10 @@ namespace TrainEngine
 
         public TrainSimulation StartSimulation()
         {
+            
             // Checks to see if everything is in order for the simulation i.e a train & schedule exists
             ValidateSimulation();
-
+            
             DateTime currentTime = schedule.startLocation.departureTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
                 $"{schedule.startLocation} - {schedule.endLocation} at {schedule.startLocation.departureTime}");

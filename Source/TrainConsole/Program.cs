@@ -22,7 +22,7 @@ namespace TrainConsole
             Train train = new Train(0, "X-2000", 250, true);
             // What input? File? Text? Binaries? Path?
             TrackIO trackIO = new TrackIO();
-
+            trackIO.Parse();
             TrainSimulation simulation = new TrainSimulation(100, trackIO).AddSchedule(schedule).AddTrain(train).StartSimulation();
         }
     }
