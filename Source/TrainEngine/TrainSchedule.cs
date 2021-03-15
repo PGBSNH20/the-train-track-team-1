@@ -23,7 +23,7 @@ namespace TrainEngine
         public static List<Location> ParseRoute(string safeFileName)
         {
             List<Location> locations = new List<Location>();
-            StreamReader reader = new StreamReader(Environment.CurrentDirectory + "/" + safeFileName);
+            StreamReader reader = new StreamReader(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt");
             string input;
             while ((input = reader.ReadLine()) != null && (!String.IsNullOrWhiteSpace(input)))
             {
