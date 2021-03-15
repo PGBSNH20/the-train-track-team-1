@@ -45,7 +45,7 @@ namespace TrainEngine
 
             currentTime = locations[0].departureTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
-                $"{locations[0].destinationName} - {locations[locations.Count-1].destinationName} at {locations[0].departureTime}");
+                $"{locations[0].destinationName} - {locations[locations.Count - 1].destinationName} at {locations[0].departureTime}");
 
             // Run stopwatch on a seperate thread
             Thread thread = new Thread(new ThreadStart(StartStopwatch));
@@ -54,9 +54,9 @@ namespace TrainEngine
 
             List<Location> passedDestinations = new List<Location>();
             int trainPositionIndex = 0;
-            foreach (Location dest in locations)
+            for (int i = 0; i < locations.Count; i++)
             {
-                Console.WriteLine($"Departuring from {dest.destinationName} at {dest.departureTime}");
+                Console.WriteLine($"Departuring from {locations[i].destinationName} at {locations[i].departureTime}");
 
                 int passedDestinationsLength = passedDestinations.Count;
                 while (passedDestinations.Count == passedDestinationsLength)
@@ -66,32 +66,38 @@ namespace TrainEngine
                     Thread.Sleep(1000);
                     trainPositionIndex++;
 
-                    if(IsAtCrossing(trainPositionIndex))
+                    if (IsAtCrossing(trainPositionIndex))
                     {
                         Console.WriteLine("Arrived at level-crossing, waiting...");
                         Thread.Sleep(1000);
                     }
 
-                    foreach (Station s in trackIO.Track.IntermediateStationsID)
+                    foreach (Station s in trackIO.Track.StationsID)
                     {
                         if (s.Distance == trainPositionIndex)
                         {
-                            passedDestinations.Add(dest);
+                            passedDestinations.Add(locations[i]);
                         }
                     }
                 }
 
-                Console.WriteLine($"Arrived at {dest.destinationName} at {currentTime}");
-                Thread.Sleep(1000);
-                Console.WriteLine($"Train departuring in {dest.departureTime.Subtract(currentTime)}");
+                // End location reached
+                if (i == locations.Count-2)
+                {
+                    break;
+                }
 
-                while (currentTime < dest.departureTime)
+                Console.WriteLine($"Arrived at {locations[i + 1].destinationName} at {currentTime}");
+                Thread.Sleep(1000);
+                Console.WriteLine($"Train departuring in {locations[i + 1].departureTime.Subtract(currentTime)}");
+
+                while (currentTime < locations[i].departureTime)
                 {
                     Thread.Sleep(500);
                 }
             }
 
-            Console.WriteLine($"\nFinal destination {locations[locations.Count-1].destinationName} has been reached. @{currentTime.TimeOfDay}");
+            Console.WriteLine($"\nFinal destination {locations[locations.Count - 1].destinationName} has been reached. @{currentTime.TimeOfDay}");
             return this;
         }
 
@@ -119,7 +125,7 @@ namespace TrainEngine
 
         private void StartStopwatch()
         {
-            while(true)
+            while (true)
             {
                 Thread.Sleep((int)(60000 / realtimeMultiplier));
                 currentTime = currentTime.AddMinutes(1);
