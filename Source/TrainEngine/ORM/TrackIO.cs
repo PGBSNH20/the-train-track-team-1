@@ -33,6 +33,25 @@ namespace TrainEngine
             parser.Close();
         }
 
+        public static void ExportTrack(string track, string safeFileName)
+        {
+            try
+            {
+                Directory.CreateDirectory(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            var writer = new StreamWriter(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/track.txt");
+
+            writer.Write(track);
+            writer.Flush();
+            writer.Close();
+        }
+
         private static long ReturnStationDistance(string track, char id)
         {
             try
