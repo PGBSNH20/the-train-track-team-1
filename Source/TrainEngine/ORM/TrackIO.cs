@@ -9,12 +9,13 @@ namespace TrainEngine
     public class TrackIO : ITrackIO
     {
         public _Track Track { get; set; }
-        private string Input;
-        public TrackIO(string input)
+        
+        private string Input = Environment.CurrentDirectory + @"/track.txt";
+        public TrackIO()
         {
             Track = new _Track();
-            Track.IntermediateStations = new List<Station>();
-            Input = input;
+            
+            Track.IntermediateStationsID = new List<Station>();
         }
         public void Parse()
         {
@@ -27,39 +28,80 @@ namespace TrainEngine
                 {
                     if (c != 'A' && c != formattedStations.Last())
                     {
-                        Track.IntermediateStations.Add(new Station() {Name = c.ToString(), Distance = 5});
+                        Track.IntermediateStationsID.Add(new Station() {ID = c.ToString(), Distance = ReturnStationDistance(input, c)});
                     }
                     else if (c == 'A')
                     {
-                        Track.StartLocation = c.ToString();
+                        Track.StartLocationID = c.ToString();
                     }
                     else
                     {
-                        Track.EndLocation = c.ToString();
+                        Track.EndLocationID = c.ToString();
                     }
                 }
-                Track.TotalDistance = ReturnDistance(input);
+                Track.LevelCrossing.Location = ReturnLeveLCrossingDistance(input);
+                Track.TotalDistance = ReturnTotalDistance(input);
             }
             parser.Close();
         }
-        private static long ReturnDistance(string input)
+
+        private static long ReturnStationDistance(string track, char id)
         {
-            long x = 0;
+            try
+            {
+                long distance = 0;
+                track = Regex.Replace(track, "[^" + id + "-]", string.Empty);
+                track = track.Remove(track.IndexOf(id) + 1, track.Length - track.IndexOf(id) - 1);
+                foreach (var c in track)
+                {
+                    if (c == '-')
+                    {
+                        distance++; //Add a KM
+                    }
+                }
+                return distance;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+        private static long ReturnLeveLCrossingDistance(string track)
+        {
+            try
+            {
+                track = Regex.Replace(track, "[^-=]", string.Empty);
+                long levelCrossingDistance = 0;
+                track = track.Remove(track.IndexOf('=') + 1, track.Length - track.IndexOf('=') - 1);
+                foreach (var i in track)
+                {
+                    if (i == '-')
+                    {
+                        levelCrossingDistance++; //Add a KM
+                    }
+                }
+                return levelCrossingDistance;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+        private static long ReturnTotalDistance(string input)
+        {
+            long distance = 0;
             try
             {
                 foreach (var c in input)
                 {
                     if (c == '-')
                     {
-                        x++;
-                    }
-                    else if (c == '=')
-                    {
-                        //Do stuff!
+                        distance++; //Add a KM
                     }
                 }
-
-                return x;
+                return distance;
             }
             catch (Exception ex)
             {
@@ -69,10 +111,21 @@ namespace TrainEngine
         }
         public class _Track
         {
-            public string StartLocation { get; set; }
-            public string EndLocation { get; set; }
-            public List<Station> IntermediateStations { get; set; }
+            public _LevelCrossing LevelCrossing { get; }
+            public string StartLocationID { get; set; }
+            public string EndLocationID{ get; set; }
+            public List<Station> IntermediateStationsID { get; set; }
             public long TotalDistance { get; set; }
+            public _Track()
+            {
+                LevelCrossing = new _Track._LevelCrossing();
+            }
+            public class _LevelCrossing
+            {
+                public long Location { get; set; } //The location which the level crossing occurs measured in KM
+            }
         }
+
+        
     }
 }

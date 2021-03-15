@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TrainEngine;
 
 namespace TrainConsole
@@ -16,9 +17,7 @@ namespace TrainConsole
 		new Location("2021/03/08 15:35", "2021/03/08 15:36", "Herrljunga"),
 		new Location("2021/03/08 15:37", "2021/03/08 15:38", "Falköping"),
             };
-
             TrainSchedule schedule = new TrainSchedule(startLocation, endLocation, destinations);
-          
             Train train = new Train(0, "X-2000", 250, true);
             TrackIO trackIO = new TrackIO("(A)----(C)-------(B)");
             trackIO.Parse();

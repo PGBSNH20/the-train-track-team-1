@@ -9,4 +9,10 @@
     <ProjectReference Include="..\TrainEngine\TrainEngine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="track.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -8,13 +8,13 @@ namespace TrainEngine
     public class TrainSimulation
     {
         private double realtimeMultiplier; // Realtime divided by times value (ex 10 is 10x faster)
-        private _Track track;
+        private Track track;
         private Train train = null;
         private TrainSchedule schedule = null;
-        public TrainSimulation(double realtimeMultiplier, _Track track)
+        public TrainSimulation(double realtimeMultiplier, Track track)
         {
             this.realtimeMultiplier = realtimeMultiplier;
-            this.track = track;
+            this.TrackIO = trackIO;
         }
 
         public TrainSimulation AddTrain(Train train)
@@ -40,18 +40,19 @@ namespace TrainEngine
 
         public TrainSimulation StartSimulation()
         {
+            
             // Checks to see if everything is in order for the simulation i.e a train & schedule exists
             ValidateSimulation();
 
-            DateTime currentTime = schedule.startLocation.departureTime;
+            DateTime currentTime = schedule.startTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
-                $"{schedule.startLocation.destinationName} - {schedule.endLocation.destinationName} at {schedule.startLocation.departureTime}");
+                $"{schedule.StartLocation} - {schedule.EndLocation} at {schedule.startTime}");
 
             List<Location> passedDestinations = new List<Location>();
             int trainPositionIndex = 0;
             foreach (Location dest in schedule.destinations)
             {
-                Console.WriteLine($"Departuring from {schedule.startLocation.destinationName} at {currentTime}");
+                Console.WriteLine($"Departuring from {schedule.StartLocation} at {currentTime}");
 
                 int passedDestinationsLength = passedDestinations.Count;
                 while (passedDestinations.Count == passedDestinationsLength)
