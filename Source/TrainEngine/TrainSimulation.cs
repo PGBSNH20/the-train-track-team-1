@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using static TrainEngine.TrackIO;
 
 namespace TrainEngine
 {
     public class TrainSimulation
     {
         private double realtimeMultiplier; // Realtime divided by times value (ex 10 is 10x faster)
-        private Track track;
+        private ITrackIO trackIO;
         private Train train = null;
-        private TrainSchedule schedule = null;
-        public TrainSimulation(double realtimeMultiplier, Track track)
+        private List<Location> locations = null;
+        private DateTime currentTime;
+        public TrainSimulation(double realtimeMultiplier, ITrackIO trackIO)
         {
             this.realtimeMultiplier = realtimeMultiplier;
-            this.TrackIO = trackIO;
+            this.trackIO = trackIO;
         }
 
         public TrainSimulation AddTrain(Train train)
@@ -27,50 +27,58 @@ namespace TrainEngine
             this.train = train;
             return this;
         }
-        public TrainSimulation AddSchedule(TrainSchedule schedule)
+        public TrainSimulation AddDestinations(List<Location> locations)
         {
-            if (this.schedule != null)
+            if (this.locations != null)
             {
-                throw new Exception("There can only be on schedule");
+                throw new Exception("There can only be on locations");
             }
 
-            this.schedule = schedule;
+            this.locations = locations;
             return this;
         }
 
         public TrainSimulation StartSimulation()
         {
-            
-            // Checks to see if everything is in order for the simulation i.e a train & schedule exists
+            // Checks to see if everything is in order for the simulation i.e a train & locations exists
             ValidateSimulation();
 
-            DateTime currentTime = schedule.startTime;
+            currentTime = locations[0].departureTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
-                $"{schedule.StartLocation} - {schedule.EndLocation} at {schedule.startTime}");
+                $"{locations[0].destinationName} - {locations[locations.Count-1].destinationName} at {locations[0].departureTime}");
+
+            // Run stopwatch on a seperate thread
+            Thread thread = new Thread(new ThreadStart(StartStopwatch));
+            thread.IsBackground = true;
+            thread.Start();
 
             List<Location> passedDestinations = new List<Location>();
             int trainPositionIndex = 0;
-            foreach (Location dest in schedule.destinations)
+            foreach (Location dest in locations)
             {
-                Console.WriteLine($"Departuring from {schedule.StartLocation} at {currentTime}");
+                Console.WriteLine($"Departuring from {dest.destinationName} at {dest.departureTime}");
 
                 int passedDestinationsLength = passedDestinations.Count;
                 while (passedDestinations.Count == passedDestinationsLength)
                 {
                     Console.WriteLine("..---.....---..");
 
-                    Thread.Sleep((int)(60000 / realtimeMultiplier));
+                    Thread.Sleep(1000);
                     trainPositionIndex++;
 
-                    foreach (Station s in track.IntermediateStations)
+                    if(IsAtCrossing(trainPositionIndex))
                     {
-                        Console.WriteLine($"S distance: {s.Distance}");
+                        Console.WriteLine("Arrived at level-crossing, waiting...");
+                        Thread.Sleep(1000);
+                    }
+
+                    foreach (Station s in trackIO.Track.IntermediateStationsID)
+                    {
                         if (s.Distance == trainPositionIndex)
                         {
                             passedDestinations.Add(dest);
                         }
                     }
-
                 }
 
                 Console.WriteLine($"Arrived at {dest.destinationName} at {currentTime}");
@@ -79,12 +87,11 @@ namespace TrainEngine
 
                 while (currentTime < dest.departureTime)
                 {
-                    currentTime = currentTime.AddMilliseconds(500);
-                    Thread.Sleep((int)(500 / realtimeMultiplier));
+                    Thread.Sleep(500);
                 }
             }
 
-            Console.WriteLine($"\nFinal destination {schedule.endLocation.destinationName} has been reached. @{currentTime.TimeOfDay}");
+            Console.WriteLine($"\nFinal destination {locations[locations.Count-1].destinationName} has been reached. @{currentTime.TimeOfDay}");
             return this;
         }
 
@@ -95,13 +102,27 @@ namespace TrainEngine
                 throw new Exception("You need a train in order to start the simulation");
             }
 
-            if (schedule == null)
+            if (locations == null)
             {
-                throw new Exception("You need a schedule in order to start the simulation");
+                throw new Exception("You need a locations in order to start the simulation");
             }
-            if (track == null)
+            if (trackIO == null)
             {
                 throw new Exception("You need a track in order to start the simulation");
+            }
+        }
+
+        private bool IsAtCrossing(int index)
+        {
+            return trackIO.Track.LevelCrossing.Location == index ? true : false;
+        }
+
+        private void StartStopwatch()
+        {
+            while(true)
+            {
+                Thread.Sleep((int)(60000 / realtimeMultiplier));
+                currentTime = currentTime.AddMinutes(1);
             }
         }
     }
