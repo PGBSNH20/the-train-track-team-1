@@ -9,12 +9,11 @@ namespace TrainEngine
     public class TrackIO : ITrackIO
     {
         public _Track Track { get; set; }
-        private string Input;
-        public TrackIO(string input)
+        private string Input = Environment.CurrentDirectory + @"/track.txt";
+        public TrackIO()
         {
             Track = new _Track();
             Track.IntermediateStations = new List<Station>();
-            Input = input;
         }
         public void Parse()
         {
