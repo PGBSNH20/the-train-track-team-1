@@ -45,7 +45,7 @@ namespace TrainEngine
 
             currentTime = locations[0].departureTime;
             Console.WriteLine($"Train {train.name} (max speed {train.maxSpeedKmh}km/h) starting its route from " +
-                $"{locations[0].destinationName} - {locations[locations.Count - 1].destinationName} at {locations[0].departureTime}");
+                $"{locations[0].destinationName} - {locations[locations.Count - 1].destinationName} at {currentTime}");
 
             // Run stopwatch on a seperate thread
             Thread thread = new Thread(new ThreadStart(StartStopwatch));
@@ -56,7 +56,7 @@ namespace TrainEngine
             int trainPositionIndex = 0;
             for (int i = 0; i < locations.Count; i++)
             {
-                Console.WriteLine($"Departuring from {locations[i].destinationName} at {locations[i].departureTime}");
+                Console.WriteLine($"Departuring from {locations[i].destinationName} at {currentTime}");
 
                 int passedDestinationsLength = passedDestinations.Count;
                 while (passedDestinations.Count == passedDestinationsLength)
@@ -91,7 +91,7 @@ namespace TrainEngine
                 Thread.Sleep(1000);
                 Console.WriteLine($"Train departuring in {locations[i + 1].departureTime.Subtract(currentTime)}");
 
-                while (currentTime < locations[i].departureTime)
+                while (currentTime < locations[i+1].departureTime)
                 {
                     Thread.Sleep(500);
                 }
