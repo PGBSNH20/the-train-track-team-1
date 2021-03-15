@@ -15,7 +15,7 @@ namespace TrainEngine
         {
             Track = new _Track();
             
-            Track.IntermediateStationsID = new List<Station>();
+            Track.StationsID = new List<Station>();
         }
         public void Parse()
         {
@@ -26,18 +26,7 @@ namespace TrainEngine
                 var formattedStations = Regex.Replace(input, "[^A-Z]", string.Empty);
                 foreach (var c in formattedStations)
                 {
-                    if (c != 'A' && c != formattedStations.Last())
-                    {
-                        Track.IntermediateStationsID.Add(new Station() {ID = c.ToString(), Distance = ReturnStationDistance(input, c)});
-                    }
-                    else if (c == 'A')
-                    {
-                        Track.StartLocationID = c.ToString();
-                    }
-                    else
-                    {
-                        Track.EndLocationID = c.ToString();
-                    }
+                    Track.StationsID.Add(new Station() {ID = c.ToString(), Distance = ReturnStationDistance(input, c)});
                 }
                 Track.LevelCrossing.Location = ReturnLeveLCrossingDistance(input);
                 Track.TotalDistance = ReturnTotalDistance(input);
@@ -112,9 +101,7 @@ namespace TrainEngine
         public class _Track
         {
             public _LevelCrossing LevelCrossing { get; }
-            public string StartLocationID { get; set; }
-            public string EndLocationID{ get; set; }
-            public List<Station> IntermediateStationsID { get; set; }
+            public List<Station> StationsID { get; set; }
             public long TotalDistance { get; set; }
             public _Track()
             {
@@ -125,7 +112,5 @@ namespace TrainEngine
                 public long Location { get; set; } //The location which the level crossing occurs measured in KM
             }
         }
-
-        
     }
 }
