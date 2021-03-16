@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TrainEngine.Models;
-namespace TrainEngine
+namespace TrainEngine.Interfaces
 {
     public interface ITrackIO
     {

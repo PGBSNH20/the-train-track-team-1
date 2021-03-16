@@ -11,7 +11,8 @@ namespace TrainEngine
         public static List<Location> ParseRoute(string safeFileName)
         {
             List<Location> locations = new List<Location>();
-            StreamReader reader = new StreamReader(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt");
+            StreamReader reader =
+                new StreamReader(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt");
             string input;
             while ((input = reader.ReadLine()) != null && (!String.IsNullOrWhiteSpace(input)))
             {
@@ -25,12 +26,6 @@ namespace TrainEngine
             }
 
             return locations;
-        }
-
-        public static void GenerateRoute(string safeFileName, List<Location> destinations)
-        {
-            TrainSchedule.SaveRoute(destinations, "Route1"); 
-            TrackIO.ExportTrack("[A]------[B]----[C]---[D]---=--[E]---[F]", "Route1");
         }
 
         public static void SaveRoute(List<Location> destinations, string safeFileName)
@@ -47,14 +42,15 @@ namespace TrainEngine
                 lines.Add($"{destination.departureTime.ToString("g").Replace("-", "/")}|{destination.destinationName}");
             }
 
-            try
+            if (!Directory.Exists(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName))
             {
                 Directory.CreateDirectory(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName);
             }
-            catch (Exception)
+            else
             {
-                throw;
-            }
+                throw new Exception("Could not save route. Route name already exists in root directory.");
+            }   
+           
 
             using (StreamWriter outputFile = new StreamWriter(Environment.CurrentDirectory+ "/TrainRoutes/" + safeFileName + "/route.txt"))
             {
