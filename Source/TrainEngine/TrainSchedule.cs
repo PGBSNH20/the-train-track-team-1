@@ -8,16 +8,39 @@ namespace TrainEngine
 
     public class TrainSchedule
     {
-        public static List<Location> ParseRoute(string safeFileName)
+        public static List<Location> ParseRoute(string safeFileName, bool testing = false)
         {
             List<Location> locations = new List<Location>();
-            StreamReader reader = new StreamReader(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt");
-            string input;
-            while ((input = reader.ReadLine()) != null && (!String.IsNullOrWhiteSpace(input)))
+            StreamReader reader;
+            if (testing)
             {
-                string[] data = input.Split('|');
-                locations.Add(new Location(data[0], data[1]));
+                var a = Directory.GetParent(Environment.CurrentDirectory);
+                var b = Directory.GetParent(a.ToString());
+                var c = Directory.GetParent(b.ToString());
+                var d = Directory.GetParent(c.ToString());
+                reader = new StreamReader(d + "/TrainConsole/bin/Debug/net5.0/TrainRoutes/" + safeFileName + "/route_test.txt");
             }
+            else
+            {
+                reader = new StreamReader(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt");
+            }
+
+            string input;
+            try
+            {
+                while ((input = reader.ReadLine()) != null && (!String.IsNullOrWhiteSpace(input)))
+                {
+                    string[] data = input.Split('|');
+                    
+                    locations.Add(new Location(data[0], data[1]));
+                }
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("Something was wrong with the devider charecter");
+            }
+            
 
             if (locations.Count <= 0)
             {
@@ -29,7 +52,7 @@ namespace TrainEngine
 
         public static void GenerateRoute(string safeFileName, List<Location> destinations)
         {
-            TrainSchedule.SaveRoute(destinations, "Route1"); 
+            TrainSchedule.SaveRoute(destinations, safeFileName); 
             TrackIO.ExportTrack("[A]------[B]----[C]---[D]---=--[E]---[F]", "Route1");
         }
 

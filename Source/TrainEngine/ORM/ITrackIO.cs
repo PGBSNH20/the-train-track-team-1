@@ -6,6 +6,6 @@ namespace TrainEngine
     public interface ITrackIO
     {
         Track Track { get; set; }
-        void Parse();
+        void Parse(bool testing = false);
     }
 }

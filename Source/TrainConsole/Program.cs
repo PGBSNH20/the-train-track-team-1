@@ -22,7 +22,7 @@ namespace TrainConsole
                 new Location("2021/03/08 19:30", "Stockholm")
             };
 
-            if (!Directory.Exists(Environment.CurrentDirectory + "/" + RouteName))
+            if (!Directory.Exists(Environment.CurrentDirectory + "/TrainRoutes/" + RouteName))
             {
              TrainSchedule.GenerateRoute(RouteName, destinationsToGenerateRoute);
             }
