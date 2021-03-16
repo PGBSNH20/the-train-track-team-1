@@ -40,7 +40,7 @@ namespace TrainEngine
             return this;
         }
 
-        public void Start()
+        private void StartSimulation()
         {
             // Checks to see if everything is in order for the simulation i.e a train & locations exists
             Validate();
@@ -51,7 +51,7 @@ namespace TrainEngine
 
             // Run stopwatch on a seperate thread
             Thread thread = new Thread(new ThreadStart(StartStopwatch));
-            thread.IsBackground = true;
+            thread.IsBackground = false; // Run in foreground to avoid clock ticking when application has closed
             thread.Start();
 
             List<Location> passedDestinations = new List<Location>();
@@ -84,7 +84,7 @@ namespace TrainEngine
                 }
 
                 // End location reached
-                if (i == locations.Count-2)
+                if (i == locations.Count - 2)
                 {
                     break;
                 }
@@ -93,13 +93,20 @@ namespace TrainEngine
                 Thread.Sleep(1000);
                 Console.WriteLine($"Train departuring in {locations[i + 1].departureTime.Subtract(currentTime)}");
 
-                while (currentTime < locations[i+1].departureTime)
+                while (currentTime < locations[i + 1].departureTime)
                 {
                     Thread.Sleep(500);
                 }
             }
 
             Console.WriteLine($"\nFinal destination {locations[locations.Count - 1].destinationName} has been reached. @{currentTime.TimeOfDay}");
+        }
+
+        public void Start()
+        {
+            Thread simulationThread = new Thread(new ThreadStart(StartSimulation));
+            simulationThread.IsBackground = false;
+            simulationThread.Start();
         }
 
         private void Validate()

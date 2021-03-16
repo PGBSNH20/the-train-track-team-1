@@ -32,7 +32,6 @@ namespace TrainEngine
         {
             if (File.Exists(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt"))
             {
-                Console.WriteLine("File already exists try Loading it insead");
                 return;
             }
             List<string> lines = new List<string>();
