@@ -30,7 +30,7 @@ namespace TrainConsole
             Train[] trains = Train.Parse("trains.txt");
             trackIO.Parse();
 
-            ITrainSimulation simulation = new TrainSimulation(100, trackIO).AddDestinations(destinations).AddTrain(trains[0]);
+            ITrainSimulation simulation = new TrainSimulation(175, trackIO).AddDestinations(destinations).AddTrain(trains[0]);
             simulation.Start();
 
             //trains[0] because we only have one train at the moment. But trains.txt can and will contain multiple ones.
