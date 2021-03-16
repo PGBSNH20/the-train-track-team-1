@@ -11,38 +11,21 @@ namespace TrainEngine.Tests
     public class TrackOrmTests
     {
         [Fact]
-        public void test()
+        public void ParseTrain()
         {
-            string RouteName = "RouteTest"; //This is what we decide to call a specific route. It is a folder containing track.txt and route.txt
-            List<Location> destinationsToGenerateRoute = new List<Location>(){
-                new Location("2021/03/08 15:30", "Göteborg"),
-                new Location("2021/03/08 15:52", "Alingsås"),
-                new Location("2021/03/08 16:23", "Vårgårda"),
-                new Location("2021/03/08 17:42", "Herrljunga"),
-                new Location("2021/03/08 18:50", "Falköping"),
-                new Location("2021/03/08 19:30", "Stockholm")
-            };
+            Train[] trains = Train.Parse("trains.txt");
 
-            if (!Directory.Exists(Environment.CurrentDirectory + "/TrainRoutes/" + RouteName))
-            {
-                TrainSchedule.GenerateRoute(RouteName, destinationsToGenerateRoute);
-            }
-
-            var destinations = TrainSchedule.ParseRoute(RouteName); //Here we put the RouteName
-            ITrackIO trackIO = new TrackIO(RouteName); //Here we put the RouteName
-
-            Train[] trains = new TrainSomethingYouCanChooseABetterName().Parse("trains.txt");
-            trackIO.Parse();
-
-            ITrainSimulation simulation = new TrainSimulation(100, trackIO).AddDestinations(destinations).AddTrain(trains[0]);
-
-
+            Assert.Equal(0, trains[0].id);
+            Assert.False(trains[0].inUse);
+            Assert.Equal(250, trains[0].maxSpeedKmh);
+            Assert.Equal("X-2000", trains[0].name);
         }
 
         [Fact]
+        //First you need to create a route that have a parse error in the route.txt file
         public void ParseDestinationsWithError()
         {
-            Action actionResult = () => TrainSchedule.ParseRoute("Route2", true);
+            Action actionResult = () => TrainSchedule.ParseRoute("TestRoute1", true);
             Exception exeptionResult = Assert.Throws<Exception>(actionResult);
             
             Assert.Equal("Something was wrong with the devider charecter", exeptionResult.Message);
@@ -69,7 +52,7 @@ namespace TrainEngine.Tests
 
             var result = trackOrm.Track.StationsID.Count;
 
-            Assert.Equal(5, result);
+            Assert.Equal(6, result);
         }
     }
 }

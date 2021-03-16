@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TrainEngine.Models;
-
+using TrainEngine.Interfaces;
 namespace TrainEngine
 {
     public class TrackIO : ITrackIO
@@ -26,7 +26,7 @@ namespace TrainEngine
                 var b = Directory.GetParent(a.ToString());
                 var c = Directory.GetParent(b.ToString());
                 var d = Directory.GetParent(c.ToString());
-                parser = new StreamReader(d + "/TrainConsole/bin/Debug/net5.0/TrainRoutes/" + SafeFileName + "/track_test.txt");
+                parser = new StreamReader(d + "/TrainConsole/bin/Debug/net5.0/TrainRoutes/" + SafeFileName + "/track.txt");
             }
             else
             {

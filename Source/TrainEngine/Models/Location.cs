@@ -10,7 +10,6 @@ namespace TrainEngine.Models
 
         public Location(String departureTime, String destinationName)
         {
-            //Console.WriteLine(departureTime);
             this.departureTime = DateTime.Parse(departureTime);
             this.destinationName = destinationName;
         }

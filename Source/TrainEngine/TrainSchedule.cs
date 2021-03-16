@@ -18,7 +18,7 @@ namespace TrainEngine
                 var b = Directory.GetParent(a.ToString());
                 var c = Directory.GetParent(b.ToString());
                 var d = Directory.GetParent(c.ToString());
-                reader = new StreamReader(d + "/TrainConsole/bin/Debug/net5.0/TrainRoutes/" + safeFileName + "/route_test.txt");
+                reader = new StreamReader(d + "/TrainConsole/bin/Debug/net5.0/TrainRoutes/" + safeFileName + "/route.txt");
             }
             else
             {
@@ -50,17 +50,10 @@ namespace TrainEngine
             return locations;
         }
 
-        public static void GenerateRoute(string safeFileName, List<Location> destinations)
-        {
-            TrainSchedule.SaveRoute(destinations, safeFileName); 
-            TrackIO.ExportTrack("[A]------[B]----[C]---[D]---=--[E]---[F]", "Route1");
-        }
-
         public static void SaveRoute(List<Location> destinations, string safeFileName)
         {
             if (File.Exists(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName + "/route.txt"))
             {
-                Console.WriteLine("File already exists try Loading it insead");
                 return;
             }
             List<string> lines = new List<string>();
@@ -70,14 +63,15 @@ namespace TrainEngine
                 lines.Add($"{destination.departureTime.ToString("g").Replace("-", "/")}|{destination.destinationName}");
             }
 
-            try
+            if (!Directory.Exists(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName))
             {
                 Directory.CreateDirectory(Environment.CurrentDirectory + "/TrainRoutes/" + safeFileName);
             }
-            catch (Exception)
+            else
             {
-                throw;
-            }
+                throw new Exception("Could not save route. Route name already exists in root directory.");
+            }   
+           
 
             using (StreamWriter outputFile = new StreamWriter(Environment.CurrentDirectory+ "/TrainRoutes/" + safeFileName + "/route.txt"))
             {
