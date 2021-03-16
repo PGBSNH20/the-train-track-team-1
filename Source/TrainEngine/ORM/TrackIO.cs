@@ -17,9 +17,23 @@ namespace TrainEngine
             SafeFileName = safeFileName;
             Track.StationsID = new List<Station>();
         }
-        public void Parse()
+        public void Parse(bool testing = false)
         {
-            var parser = new StreamReader(Environment.CurrentDirectory + "/TrainRoutes/" + SafeFileName + "/track.txt");
+            StreamReader parser;
+            if (testing)
+            {
+                var a = Directory.GetParent(Environment.CurrentDirectory);
+                var b = Directory.GetParent(a.ToString());
+                var c = Directory.GetParent(b.ToString());
+                var d = Directory.GetParent(c.ToString());
+                parser = new StreamReader(d + "/TrainConsole/bin/Debug/net5.0/TrainRoutes/" + SafeFileName + "/track.txt");
+            }
+            else
+            {
+                parser = new StreamReader(Environment.CurrentDirectory + "/TrainRoutes/" + SafeFileName + "/track.txt");
+            }
+
+
             string input;
             while ((input = parser.ReadLine()) != null && (!String.IsNullOrWhiteSpace(input)))
             {

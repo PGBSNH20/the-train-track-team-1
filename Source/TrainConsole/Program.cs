@@ -12,7 +12,7 @@ namespace TrainConsole
         static void Main(string[] args)
         {
             //Generate new route with each run if route doesn't exist so debugging is consistent between users
-            string RouteName = "Route1"; //This is what we decide to call a specific route. It is a folder containing track.txt and route.txt
+            string RouteName = "TestRoute1"; //This is what we decide to call a specific route. It is a folder containing track.txt and route.txt
             if (!Directory.Exists(Environment.CurrentDirectory + "/" + RouteName))
             {
                 List<Location> destinationsToGenerateRoute = new List<Location>(){
@@ -39,8 +39,8 @@ namespace TrainConsole
         //Let's not move this because this is just for user-debugging and has no connection to the API itself
         public static void GenerateRoute(string safeFileName, List<Location> destinations)
         {
-            TrainSchedule.SaveRoute(destinations, "Route1"); 
-            TrackIO.ExportTrack("[A]------[B]----[C]---[D]---=--[E]---[F]", "Route1");
+            TrainSchedule.SaveRoute(destinations, safeFileName); 
+            TrackIO.ExportTrack("[A]------[B]----[C]---[D]---=--[E]---[F]", safeFileName);
         }
 
     }
